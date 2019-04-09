@@ -7,6 +7,7 @@ const PORT = 3001
 app.use(cors())
 
 app.get('/', (req, res) => {
+    console.log('\nIncoming request with the following params: \n METHOD: %s\n URL: %s\n', req.method, req.url);
     const email = req.query.email
 
     const commentsMock = [
