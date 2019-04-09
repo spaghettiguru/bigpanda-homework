@@ -5,6 +5,9 @@ import {Comment} from '../Comment/Comment';
 
 import './CommentsSection.scss'
 
+// TODO: move to global config file
+const COMMENTS_SERVICE_BASE_URL = 'http://localhost:3001/';
+
 export class CommentsSection extends Component {
     constructor(props) {
         super(props);
@@ -19,10 +22,10 @@ export class CommentsSection extends Component {
     }
 
     async componentDidMount() {
-        
+
         // TODO: extract comments fetching to the separate method
         try {
-            const comments  = await fetch('http://localhost:3001/').then(response => response.json());
+            const comments  = await this.fetchComments();
             this.setState({
                 comments
             });
@@ -58,7 +61,8 @@ export class CommentsSection extends Component {
                     }
                 </ul>}
                 {!this.state.comments && !this.state.commentsFetchError && <p>Loading comments...</p>}
-                {this.state.commentsFetchError && <p>Network rrror occured during comments retrieval. Please try refreshing the page.</p>}
+                {this.state.commentsFetchError && 
+                    <p>Network rrror occured during comments retrieval. Please try refreshing the page.</p>}
             </div>
         )
     }
@@ -71,5 +75,11 @@ export class CommentsSection extends Component {
 
     postComment(comment) {
         console.log('posting comment: ', comment);
+    }
+
+    // TODO: move to the separate module
+    fetchComments(email='') {
+        return fetch(`${COMMENTS_SERVICE_BASE_URL}?email=${email}`)
+            .then(response => response.json())
     }
 }
