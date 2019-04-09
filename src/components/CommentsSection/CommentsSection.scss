@@ -1,10 +1,20 @@
-.comments-section {
+@import '../../variables';
+
+.comments {
     background: white;
     border-radius: 3px;
     box-shadow: 0 0 4px 0 rgb(239, 239, 239);
-}
 
-.comments-list {
-    list-style: none;
-    padding: 20px 15px;
+    &-filter-input {
+        margin: 10px $comments-container-horizontal-padding;
+    }
+
+    &-list {
+        list-style: none;
+        padding: 25px $comments-container-horizontal-padding;
+    }
+
+    &-list-item {
+        margin-bottom: 20px;
+    }
 }

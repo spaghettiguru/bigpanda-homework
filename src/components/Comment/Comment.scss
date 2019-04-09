@@ -2,6 +2,7 @@
     display: grid;
     grid-template-rows: auto auto;
     grid-template-columns: 100px auto;
+    align-items: center;
 
     &-pic {
         grid-row: 1/3;
@@ -10,5 +11,9 @@
 
     &-author {
         font-weight: bold;
+    }
+
+    &-text {
+        color: rgb(147, 147, 147);	
     }
 }

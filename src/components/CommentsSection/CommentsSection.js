@@ -21,9 +21,9 @@ export class CommentsSection extends Component {
     async componentDidMount() {
         try {
             const comments  = await Promise.resolve([
-                {userID: 'yuzvik.oleg@gmail.com', text: 'No comments.', userPicURL: ''},
-                {userID: 'john.doe@mail.ru', text: 'There is a very long comment here.', userPicURL: ''},
-                {userID: 'fakemail@fake.com', text: 'My email is fake, so is this comment.', userPicURL: ''}
+                {userID: 'yuzvik.oleg@gmail.com', text: 'No comments.', userPicURL: 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50'},
+                {userID: 'john.doe@mail.ru', text: 'There is a very long comment here.', userPicURL: 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50'},
+                {userID: 'fakemail@fake.com', text: 'My email is fake, so is this comment.', userPicURL: 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50'}
             ]);
             this.setState({
                 comments
@@ -38,19 +38,23 @@ export class CommentsSection extends Component {
 
     render() {
         return (
-            <div className="comments-section">
+            <div className="comments">
                 <NewCommentForm />
                 <input 
                     type="text" 
                     value={this.state.filterText} 
                     onChange={this.filterTextChanged}
-                    placeholder="Filter" />
+                    placeholder="Filter"
+                    className="comments-filter-input" />
                 {this.state.comments && <ul className="comments-list">
                     {
                         this.state.comments.map(
                             comment => 
-                            <li className="comment-item" key={comment.userID}>
-                                <Comment userID={comment.userID} text={comment.text}/>
+                            <li className="comments-list-item" key={comment.userID}>
+                                <Comment 
+                                    userPicURL={comment.userPicURL}
+                                    userID={comment.userID} 
+                                    text={comment.text}/>
                             </li>
                         )
                     }
