@@ -1,7 +1,10 @@
-import express from 'express';
+const express = require('express')
+const cors = require('cors')
 
 const app = express()
-const port = 3000
+const PORT = 3001
+
+app.use(cors())
 
 app.get('/', (req, res) => {
     
@@ -10,7 +13,7 @@ app.get('/', (req, res) => {
         {userID: 'john.doe@mail.ru', text: 'There is a very long comment here.', userPicURL: 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50'},
         {userID: 'fakemail@fake.com', text: 'My email is fake, so is this comment.', userPicURL: 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50'}
     ]);
-});
-app.post('/:id', (req, res) => {});
+})
+app.post('/:id', (req, res) => {})
 
-app.listen(port, () => console.log(`Comments service is listening on port ${port}!`))
+app.listen(PORT, () => console.log(`Comments service is listening on port ${PORT}!`))
