@@ -11,8 +11,8 @@ export class NewCommentForm extends Component {
         return (
             <form onSubmit={this.submitForm} className="new-comment-form">
                 <input type="email" placeholder="Email" />
-                <textarea placeholder="Message"></textarea>
-                <button className="submit-comment-btn">Submit</button>
+                <textarea placeholder="Message" rows="5"></textarea>
+                <button className="submit-comment-btn button-primary">Submit</button>
             </form>
         )
     }

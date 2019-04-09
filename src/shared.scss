@@ -1,0 +1,17 @@
+%button {
+    border-radius: 5px;
+    border: none;
+    padding: 10px 15px;
+}
+
+.button-primary {
+    @extend %button;
+    background: rgb(94, 168, 216);
+    color: white;
+    text-transform: uppercase;
+}
+
+input[type="email"], input[type="text"], textarea {
+    border: 1px solid rgb(209, 209, 209);
+    padding: 12px;
+}

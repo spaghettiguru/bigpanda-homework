@@ -6,13 +6,14 @@
     box-shadow: 0 0 4px 0 rgb(239, 239, 239);
 
     &-filter-input {
-        margin: 10px 0 10px $comments-container-horizontal-padding;
+        margin: 25px 0 0px $comments-container-horizontal-padding;
         width: calc(100% - #{$comments-container-horizontal-padding*2})
     }
 
     &-list {
         list-style: none;
         padding: 25px $comments-container-horizontal-padding;
+        margin: 0;
     }
 
     &-list-item {
