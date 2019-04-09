@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 
+import {NewCommentForm} from '../NewCommentForm/NewCommentForm';
+
 export class CommentsSection extends Component {
     constructor(props) {
         super(props);
@@ -15,7 +17,7 @@ export class CommentsSection extends Component {
     render() {
         return (
             <div className="comments-section">
-                <div>New comment form placeholder</div>
+                <NewCommentForm />
                 <input 
                     type="text" 
                     value={this.state.filterText} 

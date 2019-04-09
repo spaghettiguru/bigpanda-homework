@@ -1,0 +1,10 @@
+.new-comment-form {
+    display: grid;
+    grid-row-gap: 10px;
+    padding: 20px; 
+    background: rgb(239, 239, 239);
+}
+
+.submit-comment-btn {
+    justify-self: end;
+}
