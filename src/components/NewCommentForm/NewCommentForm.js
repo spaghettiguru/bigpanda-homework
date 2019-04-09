@@ -8,7 +8,8 @@ export class NewCommentForm extends Component {
 
         this.state = {
             email: '',
-            text: ''
+            text: '',
+            formSubmitInProgress: false
         };
 
         this.onCommentTextChanged = this.onCommentTextChanged.bind(this);
@@ -32,8 +33,11 @@ export class NewCommentForm extends Component {
                     rows="5" 
                     value={this.state.text}
                     onChange={this.onCommentTextChanged}
-                    required></textarea>
-                <button className="submit-comment-btn button-primary">Submit</button>
+                    required />
+                <button 
+                    className="submit-comment-btn button-primary" 
+                    disabled={this.state.formSubmitInProgress}
+                >Submit</button>
             </form>
         )
     }
@@ -52,6 +56,11 @@ export class NewCommentForm extends Component {
 
     async submitForm(e) {
         e.preventDefault();
+        this.setState({
+            formSubmitInProgress: true
+        });
+
+        // TODO: handle exceptions
         await this.props.onSubmit({
             email: this.state.email,
             text: this.state.text
@@ -60,7 +69,8 @@ export class NewCommentForm extends Component {
         // reset form fields
         this.setState({
             email: '',
-            text: ''
+            text: '',
+            formSubmitInProgress: false
         });
     }
 }
