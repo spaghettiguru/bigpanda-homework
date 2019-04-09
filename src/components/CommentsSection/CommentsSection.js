@@ -39,7 +39,7 @@ export class CommentsSection extends Component {
     render() {
         return (
             <div className="comments">
-                <NewCommentForm />
+                <NewCommentForm onSubmit={this.postComment} />
                 <input 
                     type="text" 
                     value={this.state.filterText} 
@@ -69,5 +69,9 @@ export class CommentsSection extends Component {
         this.setState({
             filterText: e.target.value
         });
+    }
+
+    postComment(comment) {
+        console.log('posting comment: ', comment);
     }
 }
