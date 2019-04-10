@@ -60,10 +60,10 @@ export class CommentsSection extends Component {
                         comments.map(
                             comment => 
                             // TODO: change key to be unique
-                            <li className="comments-list-item" key={comment.userID}>
+                            <li className="comments-list-item" key={comment.email}>
                                 <Comment 
                                     userPicURL={comment.userPicURL}
-                                    userID={comment.userID} 
+                                    userID={comment.email} 
                                     text={comment.text}/>
                             </li>
                         )
@@ -99,9 +99,16 @@ export class CommentsSection extends Component {
         }
     }
 
+    // TODO: move to the separate module
     postComment(comment) {
-        // TODO: implement
         console.log('posting comment: ', comment);
+        return fetch(COMMENTS_SERVICE_URL, {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            method: 'POST',
+            body: JSON.stringify(comment)
+        })
     }
 
     // TODO: move to the separate module
