@@ -26,7 +26,10 @@ const MongoClient = require('mongodb').MongoClient
         }
     }
 
-    function fetchCommentsByEmail(email) {}
+    async function fetchByEmail(email) {
+        
+    }
+
     function insertComment(comment) {}
 
 module.exports = {fetchAll, fetchCommentsByEmail, insertComment}

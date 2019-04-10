@@ -18,12 +18,12 @@ app.get('/', async (req, res) => {
     //     {userID: 'john.doe@mail.ru', text: 'There is a very long comment here.', userPicURL: 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50'},
     //     {userID: 'fakemail@fake.com', text: 'My email is fake, so is this comment.', userPicURL: 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50'}
     // ]
-    let commentsToReturn = await commentsActions.fetchAll();
-    //if (email) {
-      //  commentsToReturn = commentsMock.filter(comment => comment.userID.toLowerCase() === email.toLowerCase())
-    //} else {
-      //  commentsToReturn = commentsMock
-    //}
+    let commentsToReturn;
+    if (email) {
+        commentsToReturn = await commentsActions.fetchByEmail(email);
+    } else {
+        commentsToReturn = await commentsActions.fetchAll();
+    }
 
     res.send(commentsToReturn)
 })
