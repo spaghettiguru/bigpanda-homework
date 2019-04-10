@@ -1,6 +1,20 @@
 const express = require('express')
 const cors = require('cors')
 
+const MongoClient = require('mongodb').MongoClient;
+const DB_URL = 'mongodb://localhost:27017';
+const DB_NAME = 'myproject';
+const client = new MongoClient(url);
+
+client.connect(function(err) {
+    assert.equal(null, err);
+    console.log("Connected successfully to server");
+  
+    const db = client.db(dbName);
+  
+    client.close();
+  });
+
 const app = express()
 const PORT = 3001
 
@@ -30,3 +44,4 @@ app.post('/', (req, res) => {
 })
 
 app.listen(PORT, () => console.log(`Comments service is listening on port ${PORT}!`))
+
