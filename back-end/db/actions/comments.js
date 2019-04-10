@@ -19,7 +19,18 @@ async function fetchAll() {
 }
 
 async function fetchByEmail(email) {
+    let comments
+    const {db, client} = await dbUtils.connectToDB()
+    const commentsCollection = db.collection('comments')
+    try {
+        comments = await commentsCollection.find({email}).toArray()
+    } catch(error) {
+        console.error('[ERROR] Failed to convert cursor to array. Got error: ', error)
+    } finally {
+        client.close()
+    }
 
+    return comments
 }
 
 function insertSingle(comment) {}
