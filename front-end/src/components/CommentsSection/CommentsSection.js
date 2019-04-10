@@ -42,18 +42,22 @@ export class CommentsSection extends Component {
     }
 
     render() {
+        const {comments, isLoadingComments, commentsFetchError, filterText} = this.state;
+
         return (
             <div className="comments">
                 <NewCommentForm onSubmit={this.postComment} />
                 <input 
                     type="text" 
-                    value={this.state.filterText} 
+                    value={filterText} 
                     onChange={this.filterTextChanged}
                     placeholder="Filter"
                     className="comments-filter-input" />
-                {this.state.comments && <ul className="comments-list">
+
+                {comments && comments.length > 0 && 
+                    <ul className="comments-list">
                     {
-                        this.state.comments.map(
+                        comments.map(
                             comment => 
                             // TODO: change key to be unique
                             <li className="comments-list-item" key={comment.userID}>
@@ -64,12 +68,22 @@ export class CommentsSection extends Component {
                             </li>
                         )
                     }
-                </ul>}
-                {this.state.isLoadingComments && <p className="empty-state-message">Loading comments...</p>}
-                {this.state.comments && this.state.comments.length === 0 && 
-                    <p className="empty-state-message">No comments found that satisfy the specified filter criterion.</p>}
-                {this.state.commentsFetchError && 
-                    <p className="empty-state-message">Network error occured during comments retrieval. Please try refreshing the page.</p>}
+                    </ul>}
+
+                {comments && comments.length === 0 && !filterText && 
+                    <p className="empty-state-message">No comments yet.</p>}
+
+                {comments && comments.length === 0 && filterText &&
+                    <p className="empty-state-message">
+                        No comments found that satisfy the specified filter criterion.
+                    </p>}
+
+                {isLoadingComments && <p className="empty-state-message">Loading comments...</p>}
+
+                {commentsFetchError && 
+                    <p className="empty-state-message">
+                        Network error occured during comments retrieval. Please try refreshing the page.
+                    </p>}
             </div>
         )
     }
