@@ -30,7 +30,7 @@ app.get('/', async (req, res) => {
 })
 
 app.post('/', async (req, res) => {
-    console.log('\nIncoming request with the following params: \n METHOD: %s\n URL: %s\n', req.method, req.url)
+    console.log('\nIncoming request with the following params: \n METHOD: %s\n URL: %s\n BODY: %s\n', req.method, req.url, JSON.stringify(req.body))
 
     const createdComment = await commentsActions.insertSingle(req.body)
 

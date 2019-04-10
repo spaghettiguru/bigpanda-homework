@@ -36,18 +36,18 @@ async function fetchByEmail(email) {
 }
 
 async function insertSingle(comment) {
-    let comment
+    let createdComment
     const {db, client} = await dbUtils.connectToDB()
     const commentsCollection = db.collection(COLLECTION_NAME)
     try {
-        comment = await commentsCollection.insertOne(comment)
+        createdComment = await commentsCollection.insertOne(comment)
     } catch(error) {
         console.error('[ERROR] Failed to insert document %s into %s collection', comment, COLLECTION_NAME)
     } finally {
         client.close()
     }
 
-    return comment
+    return createdComment
 }
 
 module.exports = {fetchAll, fetchByEmail, insertSingle}
