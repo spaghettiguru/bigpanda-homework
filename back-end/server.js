@@ -2,7 +2,7 @@ const express = require('express')
 const cors = require('cors')
 
 const config = require('./config')
-const commentsActions = require('./db/actions')
+const commentsActions = require('./db/actions/comments')
 
 const app = express()
 
