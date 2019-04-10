@@ -6,7 +6,7 @@ import {Comment} from '../Comment/Comment';
 import './CommentsSection.scss'
 
 // TODO: move to global config file
-const COMMENTS_SERVICE_BASE_URL = 'http://localhost:3001/';
+const COMMENTS_SERVICE_URL = 'http://localhost:3001/';
 
 export class CommentsSection extends Component {
     constructor(props) {
@@ -42,7 +42,7 @@ export class CommentsSection extends Component {
     }
 
     render() {
-        const {comments, isLoadingComments, commentsFetchError, filterText} = this.state;
+        const {comments, filterText} = this.state;
 
         return (
             <div className="comments">
@@ -54,8 +54,8 @@ export class CommentsSection extends Component {
                     placeholder="Filter"
                     className="comments-filter-input" />
 
-                {comments && comments.length > 0 && 
-                    <ul className="comments-list">
+                {comments && comments.length > 0 ? 
+                    (<ul className="comments-list">
                     {
                         comments.map(
                             comment => 
@@ -68,22 +68,10 @@ export class CommentsSection extends Component {
                             </li>
                         )
                     }
-                    </ul>}
-
-                {comments && comments.length === 0 && !filterText && 
-                    <p className="empty-state-message">No comments yet.</p>}
-
-                {comments && comments.length === 0 && filterText &&
-                    <p className="empty-state-message">
-                        No comments found that satisfy the specified filter criterion.
-                    </p>}
-
-                {isLoadingComments && <p className="empty-state-message">Loading comments...</p>}
-
-                {commentsFetchError && 
-                    <p className="empty-state-message">
-                        Network error occured during comments retrieval. Please try refreshing the page.
-                    </p>}
+                    </ul>) 
+                    :
+                    (<p className="empty-state-message">{this.getEmptyStateMessage()}</p>)
+                }
             </div>
         )
     }
@@ -118,11 +106,31 @@ export class CommentsSection extends Component {
 
     // TODO: move to the separate module
     fetchComments(email) {
-        let requestURL = COMMENTS_SERVICE_BASE_URL;
+        let requestURL = COMMENTS_SERVICE_URL;
         if (email) {
             requestURL += '?email=' + email;
         }
         return fetch(requestURL)
             .then(response => response.json())
+    }
+
+    getEmptyStateMessage() {
+        const {comments, isLoadingComments, commentsFetchError, filterText} = this.state;
+
+        if (comments && comments.length === 0 ) {
+            if (filterText) {
+                return 'No comments found that satisfy the specified filter criterion.'
+            } else {
+                return 'No comments yet.'
+            }
+        }
+
+        if (isLoadingComments) {
+            return 'Loading comments...'
+        }
+
+        if (commentsFetchError) {
+            return 'Network error occured during comments retrieval. Please try refreshing the page.'
+        }
     }
 }
