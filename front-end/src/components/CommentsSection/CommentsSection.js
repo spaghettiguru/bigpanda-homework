@@ -2,11 +2,9 @@ import React, {Component} from 'react';
 
 import {NewCommentForm} from '../NewCommentForm/NewCommentForm';
 import {Comment} from '../Comment/Comment';
+import {commentsService} from '../../services/comments';
 
 import './CommentsSection.scss'
-
-// TODO: move to global config file
-const COMMENTS_SERVICE_URL = 'http://localhost:3001/';
 
 export class CommentsSection extends Component {
     constructor(props) {
@@ -20,25 +18,11 @@ export class CommentsSection extends Component {
         };
 
         this.filterTextChanged = this.filterTextChanged.bind(this);
+        this.postComment = this.postComment.bind(this);
     }
 
-    async componentDidMount() {
-
-        // using single partial state object to prevent unnecessary calls to setState 
-        // (and as a result consecutive re-renders)
-        const stateToUpdate = {};
-        try {
-            this.setState({
-                isLoadingComments: true
-            });
-            stateToUpdate.comments = await this.fetchComments();
-        } catch(error) {
-            stateToUpdate.commentsFetchError = true;
-            console.error(error.message);
-        } finally {
-            stateToUpdate.isLoadingComments = false;
-            this.setState(stateToUpdate);
-        }
+    componentDidMount() {
+        this.fetchComments();
     }
 
     render() {
@@ -76,48 +60,40 @@ export class CommentsSection extends Component {
     }
 
     async filterTextChanged(e) {
+
         // TODO: implement debounce
         const filterText = e.target.value;
         this.setState({
-            filterText,
-            isLoadingComments: true
+            filterText
         });
 
-        let filteredComments;
-        try {
-            filteredComments = await this.fetchComments(filterText);
-        } catch(error) {
-            filteredComments = null;
-            // TODO: set error flag in the state to true
-            console.error(error.message);
-        } finally {
-            this.setState({
-                comments: filteredComments,
-                isLoadingComments: false
-            });
-        }
+        this.fetchComments(filterText);
     }
 
-    // TODO: move to the separate module
     postComment(comment) {
-
-        return fetch(COMMENTS_SERVICE_URL, {
-            headers: {
-                "Content-Type": "application/json"
-            },
-            method: 'POST',
-            body: JSON.stringify(comment)
+        return commentsService.postComment(comment).then(() => {
+            this.fetchComments(this.state.filterText);
         })
     }
 
-    // TODO: move to the separate module
-    fetchComments(email) {
-        let requestURL = COMMENTS_SERVICE_URL;
-        if (email) {
-            requestURL += '?email=' + email;
+    async fetchComments(email) {
+        this.setState({
+            isLoadingComments: true
+        });
+
+        // using shared state update object to prevent consecutive calls to setState 
+        // (and as a result unnecessary re-renders)
+        const stateToUpdate = {};
+        try {
+            stateToUpdate.comments = await commentsService.fetchComments(email);
+        } catch(error) {
+            stateToUpdate.commentsFetchError = true;
+            stateToUpdate.comments = null;
+            console.error('Error occured while fetching comments from the server: ', error);
+        } finally {
+            stateToUpdate.isLoadingComments = false;
+            this.setState(stateToUpdate);
         }
-        return fetch(requestURL)
-            .then(response => response.json())
     }
 
     getEmptyStateMessage() {
@@ -136,7 +112,7 @@ export class CommentsSection extends Component {
         }
 
         if (commentsFetchError) {
-            return 'Network error occured during comments retrieval. Please try refreshing the page.'
+            return 'Network error occured during comments retrieval.'
         }
     }
 }
