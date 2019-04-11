@@ -9,6 +9,10 @@
     background: rgb(94, 168, 216);
     color: white;
     text-transform: uppercase;
+
+    &:active {
+        background: #4b92bf;
+    }
 }
 
 input[type="email"], input[type="text"], textarea {
