@@ -8,7 +8,13 @@
 
     &-filter-input {
         margin: 25px 0 0px $comments-container-horizontal-padding;
-        width: calc(100% - #{$comments-container-horizontal-padding*2})
+        width: calc(100% - #{$comments-container-horizontal-padding*2});
+        background: url('./magnifying-glass.svg') no-repeat left 8px center;
+        background-size: 16px auto;
+
+        .comments & {
+            padding-left: 30px;
+        }
     }
 
     &-list {
