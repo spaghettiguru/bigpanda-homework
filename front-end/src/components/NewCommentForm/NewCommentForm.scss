@@ -3,10 +3,30 @@
 .new-comment-form {
     display: grid;
     grid-row-gap: 10px;
+    grid-template-columns: auto max-content;
     padding: 20px $comments-container-horizontal-padding; 
     background: rgb(239, 239, 239);
-}
 
-.submit-comment-btn {
-    justify-self: end;
+    .form-error {
+        color: red;
+        font-size: 12px;
+    }
+
+    .email-field {
+        grid-column: 1/3;
+    }
+    
+    .message-field {
+        grid-column: 1/3;
+    }
+
+    .form-error + .submit-comment-btn {
+        align-self: start;
+        justify-self: initial;
+    }
+    
+    .submit-comment-btn {
+        justify-self: end;
+        grid-column: 2/3;
+    }
 }

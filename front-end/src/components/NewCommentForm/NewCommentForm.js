@@ -9,7 +9,8 @@ export class NewCommentForm extends Component {
         this.state = {
             email: '',
             text: '',
-            formSubmitInProgress: false
+            submitInProgress: false,
+            lastSubmitFailed: false
         };
 
         this.onCommentTextChanged = this.onCommentTextChanged.bind(this);
@@ -26,6 +27,7 @@ export class NewCommentForm extends Component {
                     placeholder="Email"
                     value={this.state.email}
                     onChange={this.onEmailChanged} 
+                    className="email-field"
                     required />
                 <textarea 
                     placeholder="Message" 
@@ -33,10 +35,15 @@ export class NewCommentForm extends Component {
                     rows="5" 
                     value={this.state.text}
                     onChange={this.onCommentTextChanged}
+                    className="message-field"
                     required />
+                {this.state.lastSubmitFailed && <span className="form-error">
+                    Error occured during the submission of the comment. <br />
+                    Please, try again.
+                </span>}
                 <button 
                     className="submit-comment-btn button-primary" 
-                    disabled={this.state.formSubmitInProgress}
+                    disabled={this.state.submitInProgress}
                 >Submit</button>
             </form>
         )
@@ -57,20 +64,31 @@ export class NewCommentForm extends Component {
     async submitForm(e) {
         e.preventDefault();
         this.setState({
-            formSubmitInProgress: true
+            submitInProgress: true,
+            lastSubmitFailed: false
         });
 
-        // TODO: handle exceptions
-        await this.props.onSubmit({
-            email: this.state.email,
-            text: this.state.text
-        });
+        let stateToUpdate = {};
 
-        // reset form fields
-        this.setState({
-            email: '',
-            text: '',
-            formSubmitInProgress: false
-        });
+        try {
+            await this.props.onSubmit({
+                email: this.state.email,
+                text: this.state.text
+            });
+
+            // we want to reset form fields when the comment was posted successfully
+            stateToUpdate = {
+                email: '',
+                text: ''
+            };
+        } catch (error) {
+            stateToUpdate.lastSubmitFailed = true;
+        } finally {
+
+            // resetting submitInProgress flag in finally block allows us to only do it once
+            // (instead of doing it in both try and catch clauses)
+            stateToUpdate.submitInProgress = false;
+            this.setState(stateToUpdate);
+        }
     }
 }
