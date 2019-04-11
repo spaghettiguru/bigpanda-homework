@@ -28,6 +28,7 @@ export class NewCommentForm extends Component {
                     value={this.state.email}
                     onChange={this.onEmailChanged} 
                     className="email-field"
+                    disabled={this.state.submitInProgress}
                     required />
                 <textarea 
                     placeholder="Message" 
@@ -36,6 +37,7 @@ export class NewCommentForm extends Component {
                     value={this.state.text}
                     onChange={this.onCommentTextChanged}
                     className="message-field"
+                    disabled={this.state.submitInProgress}
                     required />
                 {this.state.lastSubmitFailed && <span className="form-error">
                     Error occured during the submission of the comment. <br />
