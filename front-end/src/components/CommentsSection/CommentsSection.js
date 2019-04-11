@@ -59,8 +59,7 @@ export class CommentsSection extends Component {
                     {
                         comments.map(
                             comment => 
-                            // TODO: change key to be unique
-                            <li className="comments-list-item" key={comment.email}>
+                            <li className="comments-list-item" key={comment._id}>
                                 <Comment 
                                     userPicURL={comment.userPicURL}
                                     userID={comment.email} 
