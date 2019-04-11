@@ -100,7 +100,7 @@ export class CommentsSection extends Component {
 
     // TODO: move to the separate module
     postComment(comment) {
-        console.log('posting comment: ', comment);
+
         return fetch(COMMENTS_SERVICE_URL, {
             headers: {
                 "Content-Type": "application/json"
