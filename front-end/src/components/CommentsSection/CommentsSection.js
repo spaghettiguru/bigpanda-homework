@@ -39,13 +39,13 @@ export class CommentsSection extends Component {
                     placeholder="Filter"
                     className="comments-filter-input" />
                 <div className="comments-feed">
-                    {comments && 
+                    {!isLoadingComments && comments && 
                         <CommentsList 
                             comments={comments}
                             emptyStateMsg={this.getEmptyStateMessage()} />}
                     {commentsFetchError && 
                         <p className="comments-fetch-error">Network error occured during comments retrieval.</p>}
-                    {isLoadingComments && <div className="comments-loader"></div>}
+                    {isLoadingComments && <p className="comments-loader">Loading...</p>}
                 </div>
             </div>
         )
