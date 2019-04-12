@@ -80,7 +80,6 @@ export class CommentsSection extends Component {
         } catch(error) {
             stateToUpdate.commentsFetchError = true;
             stateToUpdate.comments = null;
-            console.error('Error occured while fetching comments from the server: ', error);
         } finally {
             stateToUpdate.isLoadingComments = false;
             this.setState(stateToUpdate);

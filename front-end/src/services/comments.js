@@ -12,16 +12,22 @@ export class CommentsService {
         }
         return fetch(requestURL)
             .then(response => response.json())
+            .catch(error => {
+                console.error('Error occured while fetching comments from the server: ', error);
+                throw error
+            })
     }
 
     postComment(comment) {
-
         return fetch(this.serviceURL, {
             headers: {
                 "Content-Type": "application/json"
             },
             method: 'POST',
             body: JSON.stringify(comment)
+        }).catch(error => {
+            console.error('Error occured while posting the comment: ', error);
+            throw error
         })
     }
 }
