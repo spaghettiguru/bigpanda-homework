@@ -40,7 +40,7 @@ app.post('/', async (req, res) => {
                             .digest("hex")
     commentToInsert.userPicURL = 'https://www.gravatar.com/avatar/' + emailHash
 
-    const insertedComment = await commentsActions.insertSingle(commentToInsert)
+    const insertedComment = (await commentsActions.insertSingle(commentToInsert)).ops[0]
 
     // this is here for demo purposes only - to show that loaders work properly in UI
     setTimeout(() => res.send(insertedComment))
