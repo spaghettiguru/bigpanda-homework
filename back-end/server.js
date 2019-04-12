@@ -23,7 +23,7 @@ app.get('/', async (req, res) => {
         commentsToReturn = await commentsActions.fetchAll()
     }
 
-    // this is here for demo purposes only - to show that loaders work properly in UI
+    // timeout is here for demo purposes only - to show that loaders work properly in UI
     setTimeout(() => res.send(commentsToReturn), 1000)
 })
 
@@ -40,10 +40,23 @@ app.post('/', async (req, res) => {
                             .digest("hex")
     commentToInsert.userPicURL = 'https://www.gravatar.com/avatar/' + emailHash
 
-    const insertedComment = (await commentsActions.insertSingle(commentToInsert)).ops[0]
+    let insertedComment
+    try {
+        const insetResult = await commentsActions.insertSingle(commentToInsert)
+        insertedComment = insetResult.ops[0]
+    } catch(error) {
+        console.log('[ERROR] DB insert operation failed: ', error)
+        insertedComment = null
+    }
 
-    // this is here for demo purposes only - to show that loaders work properly in UI
-    setTimeout(() => res.send(insertedComment))
+    // timeout is here for demo purposes only - to show that loaders work properly in UI
+    setTimeout(() => {
+        if (insertedComment) {
+            res.send(insertedComment)
+        } else {
+            res.sendStatus(500)
+        }
+    })
 })
 
 app.listen(config.httpServerPort, () => console.log(`Comments service is listening on port ${config.httpServerPort}!`))
