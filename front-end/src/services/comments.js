@@ -25,7 +25,9 @@ export class CommentsService {
             },
             method: 'POST',
             body: JSON.stringify(comment)
-        }).catch(error => {
+        })
+        .then(response => response.json())
+        .catch(error => {
             console.error('Error occured while posting the comment: ', error);
             throw error
         })

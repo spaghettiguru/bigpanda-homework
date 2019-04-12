@@ -63,8 +63,10 @@ export class CommentsSection extends Component {
     }
 
     postComment(comment) {
-        return commentsService.postComment(comment).then(() => {
-            this.fetchComments(this.state.filterText);
+        return commentsService.postComment(comment).then((newComment) => {
+            this.setState((state) => ({
+               comments: state.comments.concat(newComment) 
+            }));
         })
     }
 
