@@ -6,7 +6,7 @@ async function connectToDB() {
     let db;
 
     try {
-        client = await MongoClient.connect(config.dbServerURL)
+        client = await MongoClient.connect(config.dbServerURL, { useNewUrlParser: true })
         console.log("Connected successfully to MongoDB server")
         db = client.db(config.dbName)
     } catch (error) {
