@@ -1,7 +1,7 @@
 # bigpanda-homework
 The application consists of 2 parts: front-end and back-end.  
 
-It requires **MongoDB** server (4.0.8 community edition) and **NodeJS** (10.15.1) to be installed.  
+It requires **MongoDB** server (4.0.8 community edition) and **NodeJS** (10.15.1) to be installed (although, it may work with other versions too).  
 MongoDB server should be running on the default host (_localhost_) and port (_27017_)
 
 Run the server:
