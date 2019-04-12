@@ -17,14 +17,24 @@ app.get('/', async (req, res) => {
     const email = req.query.email
 
     let commentsToReturn
-    if (email) {
-        commentsToReturn = await commentsActions.fetchByEmail(email)
-    } else {
-        commentsToReturn = await commentsActions.fetchAll()
+    try {
+        if (email) {
+            commentsToReturn = await commentsActions.fetchByEmail(email)
+        } else {
+            commentsToReturn = await commentsActions.fetchAll()
+        }
+    } catch(error) {
+        commentsToReturn = null
     }
 
     // timeout is here for demo purposes only - to show that loaders work properly in UI
-    setTimeout(() => res.send(commentsToReturn), 1000)
+    setTimeout(() => {
+        if (commentsToReturn) {
+            res.send(commentsToReturn)
+        } else {
+            res.sendStatus(500)
+        }
+    }, 1000)
 })
 
 app.post('/', async (req, res) => {
@@ -45,7 +55,6 @@ app.post('/', async (req, res) => {
         const insetResult = await commentsActions.insertSingle(commentToInsert)
         insertedComment = insetResult.ops[0]
     } catch(error) {
-        console.log('[ERROR] DB insert operation failed: ', error)
         insertedComment = null
     }
 
@@ -56,7 +65,7 @@ app.post('/', async (req, res) => {
         } else {
             res.sendStatus(500)
         }
-    })
+    }, 1000)
 })
 
 app.listen(config.httpServerPort, () => console.log(`Comments service is listening on port ${config.httpServerPort}!`))

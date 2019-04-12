@@ -6,13 +6,25 @@ const dbUtils = require('../utils')
 const COLLECTION_NAME = 'comments'
 
 async function fetchAll() {
-    let comments = null
+    let comments
     const {db, client} = await dbUtils.connectToDB()
     const commentsCollection = db.collection(COLLECTION_NAME)
+
     try {
-        comments = await commentsCollection.find({}).toArray()
-    } catch(error) {
-        console.error('[ERROR] Failed to convert cursor to array. Got error: ', error)
+        let commentsCursor
+        try {
+            commentsCursor = await commentsCollection.find({})
+        } catch(error) {
+            console.error('DB find operation failed with the following error: ', error)
+            throw error
+        }
+
+        try {
+            comments = commentsCursor.toArray()
+        } catch(error) {
+            console.error('Failed to convert cursor to array. Got error: ', error)
+            throw error
+        }
     } finally {
         client.close()
     }
@@ -25,9 +37,20 @@ async function fetchByEmail(email) {
     const {db, client} = await dbUtils.connectToDB()
     const commentsCollection = db.collection(COLLECTION_NAME)
     try {
-        comments = await commentsCollection.find({email}).toArray()
-    } catch(error) {
-        console.error('[ERROR] Failed to convert cursor to array. Got error: ', error)
+        let commentsCursor
+        try {
+            commentsCursor = await commentsCollection.find({email})
+        } catch(error) {
+            console.error('DB find operation failed with the following error: ', error)
+            throw error
+        }
+
+        try {
+            comments = commentsCursor.toArray()
+        } catch(error) {
+            console.error('Failed to convert cursor to array. Got error: ', error)
+            throw error
+        }
     } finally {
         client.close()
     }
@@ -42,7 +65,11 @@ async function insertSingle(comment) {
     try {
         createdComment = await commentsCollection.insertOne(comment)
     } catch(error) {
-        console.error('[ERROR] Failed to insert document %s into %s collection', comment, COLLECTION_NAME)
+        console.error('Failed to insert document %s into %s collection. \nDB return the following error: %s', 
+            comment, 
+            COLLECTION_NAME,
+            error)
+            throw error
     } finally {
         client.close()
     }
