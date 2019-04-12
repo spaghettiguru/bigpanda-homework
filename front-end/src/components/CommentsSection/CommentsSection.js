@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 import {NewCommentForm} from '../NewCommentForm/NewCommentForm';
-import {Comment} from '../Comment/Comment';
+import {CommentsList} from '../CommentsList/CommentsList';
 import {commentsService} from '../../services/comments';
 
 import './CommentsSection.scss'
@@ -26,7 +26,7 @@ export class CommentsSection extends Component {
     }
 
     render() {
-        const {comments, filterText} = this.state;
+        const {comments, filterText, commentsFetchError, isLoadingComments} = this.state;
 
         return (
             <div className="comments">
@@ -37,24 +37,15 @@ export class CommentsSection extends Component {
                     onChange={this.filterTextChanged}
                     placeholder="Filter"
                     className="comments-filter-input" />
-
-                {comments && comments.length > 0 ? 
-                    (<ul className="comments-list">
-                    {
-                        comments.map(
-                            comment => 
-                            <li className="comments-list-item" key={comment._id}>
-                                <Comment 
-                                    userPicURL={comment.userPicURL}
-                                    userID={comment.email} 
-                                    text={comment.text}/>
-                            </li>
-                        )
-                    }
-                    </ul>) 
-                    :
-                    (<p className="empty-state-message">{this.getEmptyStateMessage()}</p>)
-                }
+                <div className="comments-feed">
+                    {comments && 
+                        <CommentsList 
+                            comments={comments}
+                            emptyStateMsg={this.getEmptyStateMessage()} />}
+                    {commentsFetchError && 
+                        <p className="comments-fetch-error">Network error occured during comments retrieval.</p>}
+                    {isLoadingComments && <div className="comments-loader"></div>}
+                </div>
             </div>
         )
     }
@@ -97,7 +88,7 @@ export class CommentsSection extends Component {
     }
 
     getEmptyStateMessage() {
-        const {comments, isLoadingComments, commentsFetchError, filterText} = this.state;
+        const {comments, filterText} = this.state;
 
         if (comments && comments.length === 0 ) {
             if (filterText) {
@@ -107,12 +98,6 @@ export class CommentsSection extends Component {
             }
         }
 
-        if (isLoadingComments) {
-            return 'Loading comments...'
-        }
-
-        if (commentsFetchError) {
-            return 'Network error occured during comments retrieval.'
-        }
+        return ''
     }
 }
