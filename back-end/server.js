@@ -23,7 +23,8 @@ app.get('/', async (req, res) => {
         commentsToReturn = await commentsActions.fetchAll()
     }
 
-    res.send(commentsToReturn)
+    // this is here for demo purposes only - to show that loaders work properly in UI
+    setTimeout(() => res.send(commentsToReturn), 1000)
 })
 
 app.post('/', async (req, res) => {
@@ -41,7 +42,8 @@ app.post('/', async (req, res) => {
 
     const insertedComment = await commentsActions.insertSingle(commentToInsert)
 
-    res.send(insertedComment)
+    // this is here for demo purposes only - to show that loaders work properly in UI
+    setTimeout(() => res.send(insertedComment))
 })
 
 app.listen(config.httpServerPort, () => console.log(`Comments service is listening on port ${config.httpServerPort}!`))
