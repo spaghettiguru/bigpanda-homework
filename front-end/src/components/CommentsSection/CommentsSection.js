@@ -14,7 +14,8 @@ export class CommentsSection extends Component {
             filterText: '',
             comments: null,
             commentsFetchError: false,
-            isLoadingComments: false
+            isLoadingComments: false,
+            lastResultsFiltered: false
         };
 
         this.filterTextChanged = this.filterTextChanged.bind(this);
@@ -77,6 +78,7 @@ export class CommentsSection extends Component {
         const stateToUpdate = {};
         try {
             stateToUpdate.comments = await commentsService.fetchComments(email);
+            stateToUpdate.lastResultsFiltered = !!email;
         } catch(error) {
             stateToUpdate.commentsFetchError = true;
             stateToUpdate.comments = null;
@@ -87,10 +89,10 @@ export class CommentsSection extends Component {
     }
 
     getEmptyStateMessage() {
-        const {comments, filterText} = this.state;
+        const {comments, lastResultsFiltered} = this.state;
 
         if (comments && comments.length === 0 ) {
-            if (filterText) {
+            if (lastResultsFiltered) {
                 return 'No comments found that satisfy the specified filter criterion.'
             } else {
                 return 'No comments yet.'
