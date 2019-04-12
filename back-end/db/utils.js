@@ -10,7 +10,7 @@ async function connectToDB() {
         console.log("Connected successfully to MongoDB server")
         db = client.db(config.dbName)
     } catch (error) {
-        console.error('[ERROR] Failed to connect to the database. Got error: ', error)
+        console.error('Failed to connect to the database. Got error: ', error)
     }
 
     return {db, client}
