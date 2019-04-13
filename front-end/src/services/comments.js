@@ -5,44 +5,62 @@ export class CommentsService {
     constructor(serviceURL) {
         this.serviceURL = serviceURL;
     }
-    fetchComments(email) {
+
+    async fetchComments(email) {
         let requestURL = this.serviceURL;
         if (email) {
             requestURL += '?email=' + email;
         }
-        return fetch(requestURL)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Server returned error.');
-                }
 
-                return response.json()
-            })
-            .catch(error => {
-                console.error('Error occured while fetching comments from the server: ', error);
-                throw error
-            })
+        let response;
+        try {
+            response = await fetch(requestURL);
+            if (!response.ok) {
+                throw new Error('Server returned error.');
+            }
+        } catch(error) {
+            console.error('Error occured while fetching comments from the server: ', error);
+            throw error
+        }
+
+        let comments;
+        try {
+            comments = await response.json();
+        } catch (error) {
+            console.error('Failed to parse server\'s response as JSON. ', error);
+            throw error
+        }
+
+        return comments
     }
 
-    postComment(comment) {
-        return fetch(this.serviceURL, {
-            headers: {
-                "Content-Type": "application/json"
-            },
-            method: 'POST',
-            body: JSON.stringify(comment)
-        })
-        .then(response => {
+    async postComment(comment) {
+        let response;
+        try {
+            response = await fetch(this.serviceURL, {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                method: 'POST',
+                body: JSON.stringify(comment)
+            });
             if (!response.ok) {
                 throw new Error('Server returned error.')
             }
-
-            return response.json()
-        })
-        .catch(error => {
+        } catch(error) {
             console.error('Error occured while posting the comment: ', error);
             throw error
-        })
+        }
+
+        let postedComment;
+        try {
+            postedComment = await response.json()
+        } catch(error) {
+            console.error('Failed to parse server\'s response as JSON. ', error);
+            throw error
+        }
+
+        return postedComment
     }
 }
 
