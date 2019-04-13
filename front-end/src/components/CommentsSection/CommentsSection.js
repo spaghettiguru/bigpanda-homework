@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import debounce from 'lodash.debounce';
 
 import {NewCommentForm} from '../NewCommentForm/NewCommentForm';
 import {CommentsList} from '../CommentsList/CommentsList';
@@ -18,12 +19,17 @@ export class CommentsSection extends Component {
             lastResultsFiltered: false
         };
 
-        this.filterTextChanged = this.filterTextChanged.bind(this);
+        this.handleFilterChange = this.handleFilterChange.bind(this);
+        this.filterTextChangedDebounced = debounce(this.filterTextChanged, 250);
         this.postComment = this.postComment.bind(this);
     }
 
     componentDidMount() {
         this.fetchComments();
+    }
+
+    componentWillUnmount() {
+        this.filterTextChangedDebounced.cancel();
     }
 
     render() {
@@ -35,7 +41,7 @@ export class CommentsSection extends Component {
                 <input 
                     type="text" 
                     value={filterText} 
-                    onChange={this.filterTextChanged}
+                    onChange={this.handleFilterChange}
                     placeholder="Filter"
                     className="comments-filter-input" />
                 <div className="comments-feed">
@@ -51,14 +57,16 @@ export class CommentsSection extends Component {
         )
     }
 
-    async filterTextChanged(e) {
-
-        // TODO: implement debounce
-        const filterText = e.target.value;
+    handleFilterChange(e) {
         this.setState({
-            filterText
+            filterText: e.target.value
         });
+        
+        // see https://reactjs.org/docs/faq-functions.html#debounce
+        this.filterTextChangedDebounced(e.target.value);
+    }
 
+    async filterTextChanged(filterText) {
         this.fetchComments(filterText);
     }
 
