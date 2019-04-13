@@ -11,7 +11,13 @@ export class CommentsService {
             requestURL += '?email=' + email;
         }
         return fetch(requestURL)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Server returned error.');
+                }
+
+                return response.json()
+            })
             .catch(error => {
                 console.error('Error occured while fetching comments from the server: ', error);
                 throw error
@@ -26,7 +32,13 @@ export class CommentsService {
             method: 'POST',
             body: JSON.stringify(comment)
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Server returned error.')
+            }
+
+            return response.json()
+        })
         .catch(error => {
             console.error('Error occured while posting the comment: ', error);
             throw error
