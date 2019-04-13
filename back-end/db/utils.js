@@ -11,6 +11,7 @@ async function connectToDB() {
         db = client.db(config.dbName)
     } catch (error) {
         console.error('Failed to connect to the database. Got error: ', error)
+        throw error
     }
 
     return {db, client}
